@@ -51,10 +51,14 @@ class MeetingViewSet(viewsets.ModelViewSet):
         """
         meeting = self.get_object()
         notes = meeting.notes.all().order_by("created_at")
-        self.pagination_class = NotePagination
-        serializer = self.get_serializer(notes, many=True)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        self.pagination_class = NotePagination
+        page = self.paginate_queryset(notes)
+        
+        serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(serializer.data) if page is not None else Response(serializer.data, status=status.HTTP_200_OK)
+    
 
     @action(detail=True, methods=["post"], url_path="summarize", serializer_class=Serializer)
     def summarize(self, request, pk=None):
