@@ -1,0 +1,49 @@
+<div class="container my-4 meeting-details-container">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Meeting Details <small class="text-muted">#{{ id }}</small></h4>
+        </div>
+        <div class="card-body">
+            @if (meeting) {
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="d-flex gap-2 mb-2 align-items-center">
+                            <h5 class="card-title">{{ meeting.title }}</h5>
+                            <button class="btn btn-outline-primary" (click)="generateSummary()">Generate Summary</button>
+                        </div>
+                        @if (meeting.latest_summary) {
+                            @if (meeting.latest_summary.status === StatusChoicePending) {
+                                <div class="d-flex gap-2 align-items-center">
+                                    <div class="spinner-border text-primary me-3" role="status" aria-hidden="true"></div>
+                                    <p class="card-text text-muted mb-2">Generating the summary...</p>
+                                </div>
+                            } @else if (meeting.latest_summary.status === StatusChoiceFailed) {
+                                <p class="card-text text-muted mb-2">Error generating the summary, please try again.</p>
+                            } @else {
+                                <p class="card-text text-muted mb-2">{{ meeting.latest_summary.content }}</p>
+                                <p class="card-text text-muted mb-2">Generated at: {{ meeting.latest_summary.updated_at | date:'short' }}</p>
+                            }
+                        } @else {
+                            <p class="card-text text-muted mb-2">No Summary Generated yet</p>
+                        }
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <p class="mb-1"><strong>Started:</strong><br><span class="text-secondary">{{ meeting.started_at | date:'short' }}</span></p>
+                        <p class="mb-1"><strong>Created:</strong><br><span class="text-secondary">{{ meeting.created_at | date:'short' }}</span></p>
+                    </div>
+                </div>
+                <hr>
+                <app-note-list [meetingId]="id"></app-note-list>
+            }
+            @else if (errorMessage) {
+                <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
+            }
+            @else {
+                <div class="d-flex align-items-center">
+                    <div class="spinner-border text-primary me-3" role="status" aria-hidden="true"></div>
+                    <div>Loading meeting details...</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex gap-2">
+            <h1 class="h3 mb-0">{{itemLabel}} List</h1>
+            <ng-content select="[add-button]"></ng-content>
+        </div>
+        
+        <span class="text-muted">Total: {{ totalItems }}</span>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-striped table-hover mb-0">
+            <thead #tableHeader class="table-dark">
+                <ng-content select="[table-header]"></ng-content>
+            </thead>
+            <tbody>
+                @if (items.length === 0) {
+                    <tr>
+                        <td [attr.colspan]="tableHeader?.querySelectorAll('th').length || 1" class="text-center py-4">No {{itemLabel | lowercase}} found.</td>
+                    </tr>
+                }
+                @for (item of items; track item.id) {
+                    <ng-container *ngTemplateOutlet="rowTemplate; context: { $implicit: item }"></ng-container>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <nav aria-label="list pagination" class="mt-4">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <button class="btn btn-outline-primary" [disabled]="page === 1" (click)="previousPage()">Previous</button>
+            <div class="d-flex align-items-center gap-2">
+                <label for="pageInput" class="form-label mb-0">Page</label>
+                <input
+                    id="pageInput"
+                    class="form-control"
+                    style="width: 100px;"
+                    type="number"
+                    [ngModel]="page"
+                    (ngModelChange)="pageChanged.next($event)"
+                    min="1"
+                    [max]="getMaxPage()"
+                />
+            </div>
+            <button class="btn btn-outline-primary" [disabled]="page === getMaxPage()" (click)="nextPage()">Next</button>
+            <div class="d-flex align-items-center gap-2">
+                <label for="pageSizeInput" class="form-label mb-0">Page Size</label>
+                <input
+                    id="pageSizeInput"
+                    class="form-control"
+                    style="width: 100px;"
+                    type="number"
+                    [ngModel]="pageSize"
+                    (ngModelChange)="pageSizeChanged.next($event)"
+                    min="1"
+                />
+            </div>
+            <span class="text-muted ms-auto">Page {{ page }} / {{ getMaxPage() }}</span>
+        </div>
+    </nav>
+</div>

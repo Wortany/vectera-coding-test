@@ -1,0 +1,36 @@
+<div class="container mt-3">
+    <form [formGroup]="noteForm" (submit)="onSubmit()">
+        <div class="mb-3">
+            <label for="noteAuthor" class="form-label">Author</label>
+            <input
+                type="text"
+                class="form-control"
+                id="noteAuthor"
+                formControlName="author"
+                placeholder="Enter author name"
+                [ngClass]="{ 'is-invalid': noteForm.get('author')?.invalid && noteForm.get('author')?.touched }" />
+            @if(noteForm.get('author')?.invalid && noteForm.get('author')?.touched) {
+                <div class="invalid-feedback">
+                    Author is required.
+                </div>
+            }
+        </div>
+        <div class="mb-3">
+            <label for="noteText" class="form-label">Text</label>
+            <textarea 
+                class="form-control"
+                id="noteText"
+                formControlName="text"
+                rows="4"
+                placeholder="Enter note text"
+                [ngClass]="{ 'is-invalid': noteForm.get('text')?.invalid && noteForm.get('text')?.touched }"
+            ></textarea>
+            @if(noteForm.get('text')?.invalid && noteForm.get('text')?.touched) {
+                <div class="invalid-feedback">
+                    Text is required.
+                </div>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary">Save Note</button>
+    </form>
+</div>

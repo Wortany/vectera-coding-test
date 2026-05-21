@@ -1,0 +1,32 @@
+@if(isNoteAddFormOpen) {
+    <app-note-add-form
+        [meetingId]="meetingId"
+        (noteSaved)="onNoteSaved()"
+    >
+    </app-note-add-form>
+}
+<app-list
+    [items]="notes"
+    [totalItems]="totalNotes"
+    itemLabel="Note"
+    (loadItems)="loadNotes($event)"
+    [hasPreviousPage]="hasPreviousPage"
+    [hasNextPage]="hasNextPage"
+>
+    <button add-button class="btn btn-outline-primary" (click)="openNoteAddForm()">Add</button>
+
+    <tr table-header>
+        <th scope="col">Author</th>
+        <th scope="col">Text</th>
+        <th scope="col">Created At</th>
+    </tr>
+
+    <ng-template #rowTemplate let-item>
+        <tr>
+            <td>{{ item.author }}</td>
+            <td>{{ item.text }}</td>
+            <td>{{ item.created_at | date:'short' }}</td>
+        </tr>
+    </ng-template>
+
+</app-list>

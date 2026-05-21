@@ -1,0 +1,33 @@
+<app-list
+    [items]="meetings"
+    [totalItems]="totalMeetings"
+    itemLabel="Meeting"
+    (loadItems)="loadMeetings($event)"
+    [hasPreviousPage]="hasPreviousPage"
+    [hasNextPage]="hasNextPage"
+>
+    <tr table-header>
+        <th scope="col">Title</th>
+        <th scope="col">Created At</th>
+        <th scope="col">Note Count</th>
+        <th scope="col">Latest Summary Status</th>
+    </tr>
+
+    <ng-template #rowTemplate let-item>
+        <tr>
+            <td>
+                <a [routerLink]="['/meetings', item.id]">{{ item.title }}</a>
+            </td>
+            <td>{{ item.created_at | date:'short' }}</td>
+            <td>{{ item.note_count }}</td>
+            <td>
+                @if(item.latest_summary) {
+                    <span class="badge bg-primary">{{ item.latest_summary.status }}</span>
+                } @else {
+                    <span class="text-muted">-</span>
+                }
+            </td>
+        </tr>
+    </ng-template>
+
+</app-list>
